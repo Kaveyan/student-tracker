@@ -1,11 +1,10 @@
 const { project, language, ps, certificate, clanguage, achivement } = require('../model/upload');
 const authMiddleware = require('../middleware/authMiddleware');
 const { User,Faculty } = require('../model/userModel');
-// Ensure authconst { Faculty } = require('../model/userModel');Middleware is applied to these routes to set req.userId
 
 const uploadproject = async (req, res) => {
     const { title, description, domain, proof } = req.body;
-    const userId = req.userId; // From auth middleware
+    const userId = req.userId; 
 
     try {
         const newProject = await project.create({ userId, title, description, domain, proof });
@@ -40,7 +39,7 @@ const uploadps = async (req, res) => {
 
 const uploadcertificate = async (req, res) => {
     const { title, domain, proof } = req.body;
-    const userId = req.userId; // From auth middleware
+    const userId = req.userId; 
 
     try {
         const newCertificate = await certificate.create({ userId, title, domain, proof });
@@ -52,7 +51,7 @@ const uploadcertificate = async (req, res) => {
 
 const uploadclanguage = async (req, res) => {
     const { name, proof } = req.body;
-    const userId = req.userId; // From auth middleware
+    const userId = req.userId; 
 
     try {
         const newClanguage = await clanguage.create({ userId, name, proof });
@@ -64,7 +63,7 @@ const uploadclanguage = async (req, res) => {
 
 const uploadachivement = async (req, res) => {
     const { eventname, proof } = req.body;
-    const userId = req.userId; // This should now be correctly set by authMiddleware
+    const userId = req.userId; 
   
     try {
       const newAchivement = await achivement.create({ userId, eventname, proof });
@@ -75,10 +74,10 @@ const uploadachivement = async (req, res) => {
   };
 
   const list = async (req, res) => {
-    const userId = req.userId; // From auth middleware
+    const userId = req.userId;
 
     try {
-        // Fetch the counts for each category
+        
         const [projectCount, languageCount, psCount, certificateCount, clanguageCount, achivementCount] = await Promise.all([
             project.countDocuments({ userId, verify: true }),
             language.countDocuments({ userId, verify: true }),
@@ -88,17 +87,17 @@ const uploadachivement = async (req, res) => {
             achivement.countDocuments({ userId, verify: true })
         ]);
 
-        // Update the user's points
+        
         await User.findByIdAndUpdate(userId, {
             'points.project': projectCount,
             'points.language': languageCount,
             'points.communication': clanguageCount,
             'points.certificate': certificateCount,
             'points.achievement': achivementCount,
-            'points.total': projectCount + languageCount + clanguageCount + certificateCount + achivementCount // Update total
+            'points.total': projectCount + languageCount + clanguageCount + certificateCount + achivementCount 
         });
 
-        // Send the response with updated stats
+        
         res.json({
             projects: projectCount,
             languages: languageCount,
@@ -147,10 +146,10 @@ const getFacultyDomainData = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-// In your backend (uploadcontroller.js or relevant controller file)
+
 
 const updateVerificationStatus = async (req, res) => {
-  console.log('req.user:', req.user); // Add this line to debug
+  console.log('req.user:', req.user); 
 
   if (!req.user || !req.user.domain) {
     return res.status(400).json({ message: 'Invalid user domain' });
@@ -174,7 +173,6 @@ const updateVerificationStatus = async (req, res) => {
   }
 };
 
-// A helper function to determine the correct model based on the domain
 function determineModel(domain) {
   switch (domain) {
     case 'language':
@@ -193,10 +191,9 @@ function determineModel(domain) {
 }
 
 const Rank=async (req, res) => {
-  const sortBy = req.query.sortBy || 'total'; // Default to total points if not specified
+  const sortBy = req.query.sortBy || 'total'; 
 
   try {
-    // Find all users and sort by the specified category (achievement, certificate, etc.)
     const users = await User.find().sort({ [`points.${sortBy}`]: -1 });
     res.status(200).json(users);
   } catch (err) {

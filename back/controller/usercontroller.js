@@ -1,13 +1,12 @@
 const { User, Faculty, Admin, Parent } = require('../model/userModel');
 const jwt = require('jsonwebtoken');
 
-// Function to generate JWT token
 const generateToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
 
-// Register User (Student)
+
 const registerUser = async (req, res) => {
   const { firstName, department, roleNumber, batch, email, password } = req.body;
 
@@ -106,7 +105,7 @@ const registerAdmin = async (req, res) => {
   }
 };
 
-// Register Parent
+
 const registerParent = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 

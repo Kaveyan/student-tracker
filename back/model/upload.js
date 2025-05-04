@@ -53,7 +53,7 @@ const languageSchema = mongoose.Schema({
 const psSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User', 
         required: true
     },
     name: {
@@ -69,7 +69,7 @@ const psSchema = mongoose.Schema({
 const certificateSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User', 
         required: true
     },
     title: {
@@ -114,7 +114,7 @@ const clanguageSchema = mongoose.Schema({
 const achievementSchema = mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User',
         required: true
     },
     eventname: {

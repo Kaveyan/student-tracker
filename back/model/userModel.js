@@ -133,6 +133,5 @@ const User = mongoose.model('User', userSchema);
 const Faculty = mongoose.model('Faculty', facultySchema);
 const Admin = mongoose.model('Admin', adminSchema);
 const Parent = mongoose.model('Parent', parentSchema);
-
 module.exports = { User, Faculty, Admin, Parent };
 
