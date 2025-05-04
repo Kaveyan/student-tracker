@@ -1,0 +1,217 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    text-decoration: none;
+}
+.dash Link{
+   text-decoration: none;
+}
+.f-contain{
+    height: 620px;
+    width: 700px; 
+    position: absolute;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    margin-top: 100px;
+}
+
+.f-contain header{
+    font-size: xx-large;
+    margin-left: 200px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+label{
+    color: #333;
+}
+
+.input-box{
+    display: flex;
+    flex-direction: column;
+    padding-left: 45px;
+}
+
+input{
+    position: relative;
+    height: 40px;
+    width: 250px;
+    margin-top: 2px;
+    outline: none;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0 15px;
+    margin-bottom: 23px;
+}
+
+.res{
+    display: flex;
+}
+.f-contain button{
+    outline: none;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    height: 40px;
+    width: 200px;
+    margin-top: 50px;
+    margin-left: 210px;
+}
+.column img{
+    margin-left: 700px;
+}
+.create img{
+    padding-left: 45%;
+}
+.up-form{
+    margin-top: 10%;
+    margin-left:10%
+
+}
+.up-input-box{
+    display: flex;
+    flex-direction: column;
+    padding-left: 45px;
+}
+
+.up-form button{
+    outline: none;
+    color: black;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    height: 40px;
+    width: 100px;
+    margin-top: 50px;
+    margin-left: 110px;
+}
+
+.box{
+    box-shadow: 0px 25px 80px rgba(0, 0, 0, 0.15);
+    width: 980px;
+    height: 60px;
+    margin-left: 2%;
+    background-color:#10161f ;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    padding-right: 25px;
+   
+   
+}
+.box-content{
+    display: flex;
+    padding: 2%;
+    display: flex;
+    justify-content: space-between; /* Distribute space evenly between elements */
+    align-items: center;
+}
+.dash-main-admin h2{
+    margin-bottom: 20px;
+
+}
+.box-content svg{
+  margin-right: 20px;
+}
+
+.option{
+    display: flex;
+
+}
+.option .up{
+    box-shadow: 0px 25px 80px rgba(0, 0, 0, 0.15);
+    width: 200px;
+    height: 40px;
+    margin-left: 2%;
+    background-color:#10161f ;
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 12px;
+
+}
+.dash-main-admin{
+    margin-top: 40px;
+    margin-left: 300px;
+
+}
+.up p{
+   display: flex;
+   justify-content: center;
+   margin-top: 10px;
+}
+.work{
+    background-color:#10161f ;
+    margin-top: 10px;
+  height: 300px;
+  width: 350px;
+  margin-left: 55px;
+  border-radius:  15px;
+  color: white;
+  margin-bottom: 10%;
+  align-items: center;
+  justify-content: center;
+}
+.work button{
+    margin-left: 50px;
+}
+
+.user-info{
+    margin-top: 40px;
+    margin-left: 100px;
+
+}
+.work svg{
+    color: white;
+    font-size: 600%;
+  margin-top: 20px;
+  margin-left:130px ;
+  
+  }
+.student{
+   font-size: x-large;
+   margin-left: 12px;
+   margin-bottom: 10px;
+}
+.des{
+    margin-left: 4px;
+    margin-top: 12px;
+    margin-bottom:12px ;
+}
+.title{
+    display: flex;
+    justify-content: center;
+}
+.proof{
+    font-size: x-large;
+    display: flex;
+    justify-content: center;
+}
+.up {
+    padding: 10px;
+    margin: 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer; /* Makes the div look clickable */
+    transition: background-color 0.3s ease;
+  }
+  
+  .up:hover {
+    background-color:#86a0c7; /* Changes background color on hover */
+  }
+  
+  .up p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }

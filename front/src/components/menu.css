@@ -1,0 +1,36 @@
+.menu{
+       background-color:#10161f ;
+       height: 650px;
+       width: 250px;
+       margin-left: 15px;
+       margin-top:15px ;
+       border-radius:  15px;
+       position: fixed;
+}
+.name{
+  color: white;
+  margin-left:20px;
+ padding-top: 20px;
+}
+.menu p{
+  color: rgb(255, 255, 255);
+  font-size:25px;
+  font-family:monospace;
+  margin: 30px;
+  margin-top: 40px;
+
+  padding: 10px;
+  border-radius: 6px;
+}
+.menu svg{
+  margin-right: 20px;
+
+}
+
+.menu p:hover{
+  
+  background-color:#86949F;
+  color: white;
+
+}
+
