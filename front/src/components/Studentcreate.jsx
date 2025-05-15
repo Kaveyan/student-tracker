@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import img from "../img/Startup life Customizable Semi Flat Illustrations _ Pana Style.jpeg";
+import { FaUserGraduate, FaEnvelope, FaUser, FaLock, FaBuilding, FaIdCard, FaUsers } from 'react-icons/fa';
+import './createforms.css';
 
 export default function StudentCreate() {
   const navigate = useNavigate();
@@ -14,17 +15,7 @@ export default function StudentCreate() {
     role: localStorage.getItem('selectedRole') || 'student'
   });
 
-  useEffect(() => {
-    setStudentSignup([{
-      firstName: "",
-      department: "",
-      roleNumber: "",
-      batch: "",
-      email: "",
-      password: ""
-    }]);
-  }, []);
-  
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,83 +68,131 @@ export default function StudentCreate() {
   };
 
   return (
-    <div className="column">
-      <div className='f-contain'>
-        <div>
-          <header>Register Here..</header>
+    <div className="form-container">
+      <div className="form-content">
+        <div className="form-header">
+          <FaUserGraduate className="logo-icon" />
+          <h1>Student Registration</h1>
+          <p className="subtitle">Create your student account</p>
         </div>
-        <form onSubmit={handleSubmit} className='form'>
-          <div className='res'>
-            <div className="input-box">
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="input-group">
               <label>Full Name</label>
-              <input
-                type="text"
-                name="firstName"
-                placeholder='Name...'
-                value={studentSignup.firstName}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaUser className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="firstName"
+                  placeholder="Enter your full name"
+                  value={studentSignup.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Department</label>
-              <input
-               
-                name="department"
-                placeholder='Department...'
-                value={studentSignup.department}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaBuilding className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="department"
+                  placeholder="Enter your department"
+                  value={studentSignup.department}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <div className='res'>
-            <div className="input-box">
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Roll Number</label>
-              <input
-                 type="text"
-                name="roleNumber"
-                placeholder='Roll number...'
-                value={studentSignup.roleNumber}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaIdCard className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="roleNumber"
+                  placeholder="Enter your roll number"
+                  value={studentSignup.roleNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Batch</label>
-              <input
-                type="number"
-                name="batch"
-                placeholder='Batch...'
-                value={studentSignup.batch}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaUsers className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="batch"
+                  placeholder="Enter your batch"
+                  value={studentSignup.batch}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <div className='res'>
-            <div className="input-box">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder='Email...'
-                value={studentSignup.email}
-                onChange={handleChange}
-              />
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Email Address</label>
+              <div className="input-wrapper">
+                <FaEnvelope className="input-icon" />
+                <input
+                  className="form-input"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={studentSignup.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder='Password...'
-                value={studentSignup.password}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaLock className="input-icon" />
+                <input
+                  className="form-input"
+                  type="password"
+                  name="password"
+                  placeholder="Create a password"
+                  value={studentSignup.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <button type="submit">Submit</button>
+
+          <button type="submit" className="submit-button">Create Account</button>
         </form>
-      
       </div>
-      <img src={img} alt="Illustration" />
+
+      <div className="form-background">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+      </div>
     </div>
   );
 }

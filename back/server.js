@@ -8,6 +8,10 @@ const { connectKafka } = require('./config/kafka');
 const setupKafkaTopics = require('./config/setupKafkaTopics');
 const { initializeKafkaConsumers } = require('./services/kafkaConsumers');
 require('dotenv').config();
+const passport = require('passport');
+const session = require('express-session');
+require('./config/passport'); // import passport config
+
 
 const app = express();
 const port = process.env.PORT || 3001; // Changed to 3001 to avoid conflicts
@@ -81,6 +85,40 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
+
+app.use(session({
+  secret: 'your-session-secret',
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Google OAuth route
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// Callback URL
+app.get('/auth/google/callback',
+  passport.authenticate('google', { 
+    failureRedirect: 'http://localhost:3000/login',
+    session: false 
+  }),
+  (req, res) => {
+    try {
+      const { token, user } = req.user;
+      
+      // Redirect to frontend with token & role
+      res.redirect(`http://localhost:3000/oauth-success?token=${token}&role=${user.role}&name=${encodeURIComponent(user.name)}`);
+    } catch (error) {
+      console.error('Callback error:', error);
+      res.redirect('http://localhost:3000/login?error=auth_failed');
+    }
+  }
+);
 
 // Set up routes
 app.use('/users', userRouter);

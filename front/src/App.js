@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Create from "./components/Create";
 import Login from "./components/Login";
+import OAuthSuccess from "./components/OAuthSuccess";
 import Facultycreate from "./components/Facultycreate";
 import Parentcreate from "./components/Parentcreate";
 import Admincreate from "./components/Admincreate";
@@ -11,7 +12,7 @@ import Uploadachivement from "./components/Uploadachivement";
 import Uploadcertifiate from "./components/Uploadcertifiate";
 import Uploadclanguage from "./components/Uploadclanguage";
 import Uploadproject from "./components/Uploadproject";
-import Uploadlanguage from "./components/Uploadlanguage";
+import Uploadplanguage from "./components/Uploadplanguage";
 import AdminHome from "./components/Adminhome";
 import FacultyHome from "./components/Facultyhome";
 import StudentHome from "./components/Studenhome";
@@ -25,6 +26,8 @@ function App() {
       <div className="app">
         <Routes>
           <Route path="/" element={<Login />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/create" element={<Create />} />
           <Route path="/faculty" element={<Facultycreate />} />
           <Route path="/parent" element={<Parentcreate />} />
@@ -91,10 +94,10 @@ function App() {
             } 
           />
           <Route 
-            path="/up-lan" 
+            path="/up-planguage" 
             element={
               <ProtectedRoute>
-                <Uploadlanguage />
+                <Uploadplanguage />
               </ProtectedRoute>
             } 
           />
@@ -107,7 +110,7 @@ function App() {
             } 
           />
           <Route 
-            path="/up-clan" 
+            path="/up-clanguage" 
             element={
               <ProtectedRoute>
                 <Uploadclanguage />

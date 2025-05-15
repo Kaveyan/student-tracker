@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import './uploadforms.css';
 
 export default function UploadProject() {
   const [formData, setFormData] = useState({
@@ -7,6 +10,7 @@ export default function UploadProject() {
     domain: '',
     proof: ''
   });
+  const [message, setMessage] = useState({ type: '', text: '' });
 
   const handleChange = (e) => {
     setFormData({
@@ -17,11 +21,13 @@ export default function UploadProject() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    const token = localStorage.getItem('token'); // Retrieve the JWT token from localStorage
+    const token = localStorage.getItem('token');
 
     if (!token) {
-      alert('You are not authenticated. Please log in.');
+      setMessage({
+        type: 'error',
+        text: 'You are not authenticated. Please log in.'
+      });
       return;
     }
 
@@ -30,83 +36,134 @@ export default function UploadProject() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Include the JWT token in the Authorization header
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        const data = await response.json();
-        alert('Project uploaded successfully!');
+        setMessage({
+          type: 'success',
+          text: 'Project uploaded successfully!'
+        });
         setFormData({ title: '', description: '', domain: '', proof: '' });
       } else {
         const errorData = await response.json();
-        alert(`Error uploading project: ${errorData.message}`);
+        setMessage({
+          type: 'error',
+          text: `Error uploading project: ${errorData.message}`
+        });
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('Error uploading project!');
+      setMessage({
+        type: 'error',
+        text: 'Error uploading project!'
+      });
     }
   };
 
+  const domains = [
+    'Web Development',
+    'Mobile Development',
+    'Machine Learning',
+    'Data Science',
+    'Cloud Computing',
+    'DevOps',
+    'Blockchain',
+    'IoT',
+    'Game Development',
+    'Other'
+  ];
+
   return (
-    <div>
-      <form className='up-form' onSubmit={handleSubmit}>
-        <div className='res'>
-          <div className="input-box">
-            <label>Title</label>
-            <input
-              type="text"
-              name="title"
-              placeholder='Title...'
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
+    <div className="upload-page">
+      <div className="upload-container">
+        <div className="form-section">
+          <div className="form-header">
+            <h1>Add New Project</h1>
+            <p>Share your amazing project with the community</p>
+          </div>
+
+          {message.text && (
+            <div className={`${message.type}-message`}>
+              <FontAwesomeIcon 
+                icon={message.type === 'success' ? faCheck : faExclamationCircle} 
+              />
+              {message.text}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label>Project Title</label>
+              <input
+                type="text"
+                name="title"
+                placeholder="Enter project title"
+                value={formData.title}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Description</label>
+              <textarea
+                name="description"
+                placeholder="Describe your project..."
+                value={formData.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Domain</label>
+              <select
+                name="domain"
+                value={formData.domain}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select domain</option>
+                {domains.map(domain => (
+                  <option key={domain} value={domain}>{domain}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label>Project Link</label>
+              <input
+                type="url"
+                name="proof"
+                placeholder="GitHub repository or live demo URL"
+                value={formData.proof}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Upload Project
+            </button>
+          </form>
+
+          <div className="form-footer">
+            Make sure to include a detailed description and working links
           </div>
         </div>
-        <div className='res'>
-          <div className="input-box">
-            <label>Description</label>
-            <input
-              type="text"
-              name="description"
-              placeholder='Description...'
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
+
+        <div className="illustration-section">
+          <img 
+            src="https://cdni.iconscout.com/illustration/premium/thumb/web-development-3454633-2918522.png" 
+            alt="Project Upload"
+          />
+          <h2>Showcase Your Work</h2>
+          <p>Share your projects to demonstrate your skills and build your portfolio</p>
         </div>
-        <div className='res'>
-          <div className="input-box">
-            <label>Domain</label>
-            <input
-              type="text"
-              name="domain"
-              placeholder='Domain...'
-              value={formData.domain}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-        <div className='res'>
-          <div className="input-box">
-            <label>Proof</label>
-            <input
-              type="text"
-              name="proof"
-              placeholder='Give GitHub link'
-              value={formData.proof}
-              onChange={handleChange}
-              required
-            />
-          </div>
-        </div>
-     
-        <button type="submit">Submit</button>
-      </form>
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './login.css';
-import src from '../img/Free Vector _ Unboxing concept illustration.jpeg';
+import { FaGoogle, FaEnvelope, FaLock, FaUserGraduate } from 'react-icons/fa';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -51,41 +51,71 @@ function Login() {
   };
 
   return (
-    <div className="background">
-      <div className="img">
-        <img src={src} alt="Login Illustration" />
-      </div>
-      <div className="login">
-        <form onSubmit={handleSubmit}>
-          <h3>Login Here</h3>
+    <div className="login-container">
+      <div className="login-content">
+        <div className="login-header">
+          <FaUserGraduate className="logo-icon" />
+          <h1>Welcome Back!</h1>
+          <p className="subtitle">Please enter your details to continue</p>
+        </div>
 
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            placeholder="Email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            placeholder="Password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-
-          {error && <p className="error">{error}</p>}
-
-          <button type="submit">Log In</button>
-          <div className="new">
-            <p>Don't have an account? <Link to="/Create">Signup</Link></p>
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="form-group">
+            <div className="input-group">
+              <FaEnvelope className="input-icon" />
+              <input
+                type="email"
+                placeholder="Enter your email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
           </div>
+
+          <div className="form-group">
+            <div className="input-group">
+              <FaLock className="input-icon" />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button type="submit" className="login-button">
+            Sign In
+          </button>
+
+          <div className="divider">
+            <span>or continue with</span>
+          </div>
+
+          <button 
+            type="button" 
+            className="google-button"
+            onClick={() => window.location.href = 'http://localhost:3001/auth/google'}
+          >
+            <FaGoogle className="google-icon" />
+            Sign in with Google
+          </button>
+
+          <p className="signup-link">
+            Don't have an account? <Link to="/Create">Sign up</Link>
+          </p>
         </form>
+      </div>
+
+      <div className="login-background">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
       </div>
     </div>
   );

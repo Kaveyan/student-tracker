@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "./all.css";
-import img from "../img/Free Vector _ Flat creativity concept illustration.jpeg";
+import { FaChalkboardTeacher, FaEnvelope, FaUser, FaLock, FaBuilding, FaIdCard, FaBookReader } from 'react-icons/fa';
+import './createforms.css';
 
 export default function FacultyCreate() {
   const navigate = useNavigate();
@@ -64,83 +64,131 @@ export default function FacultyCreate() {
   
 
   return (
-    <div className="column">
-      <div className='f-contain'>
-        <div>
-          <header>Register Here..</header>
+    <div className="form-container">
+      <div className="form-content">
+        <div className="form-header">
+          <FaChalkboardTeacher className="logo-icon" />
+          <h1>Faculty Registration</h1>
+          <p className="subtitle">Create your faculty account</p>
         </div>
-        <form onSubmit={handleSubmit} className='form'>
-          <div className='res'>
-            <div className="input-box">
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="input-group">
               <label>Full Name</label>
-              <input
-                type="text"
-                name="firstName"
-                placeholder='Name...'
-                value={facultySignup.firstName}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaUser className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="firstName"
+                  placeholder="Enter your full name"
+                  value={facultySignup.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Department</label>
-              <input
-                type="text"
-                name="department"
-                placeholder='Department...'
-                value={facultySignup.department}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaBuilding className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="department"
+                  placeholder="Enter your department"
+                  value={facultySignup.department}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <div className='res'>
-            <div className="input-box">
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Faculty ID</label>
-              <input
-               type="text"
-                name="roleNumber"
-                placeholder='Faculty ID...'
-                value={facultySignup.roleNumber}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaIdCard className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="roleNumber"
+                  placeholder="Enter your faculty ID"
+                  value={facultySignup.roleNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Domain</label>
-              <input
-                type="text"
-                name="domain"
-                placeholder='Domain...'
-                value={facultySignup.domain}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaBookReader className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="domain"
+                  placeholder="Enter your domain"
+                  value={facultySignup.domain}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <div className='res'>
-            <div className="input-box">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder='Email...'
-                value={facultySignup.email}
-                onChange={handleChange}
-              />
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Email Address</label>
+              <div className="input-wrapper">
+                <FaEnvelope className="input-icon" />
+                <input
+                  className="form-input"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={facultySignup.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder='Password...'
-                value={facultySignup.password}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaLock className="input-icon" />
+                <input
+                  className="form-input"
+                  type="password"
+                  name="password"
+                  placeholder="Create a password"
+                  value={facultySignup.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <button type="submit">Submit</button>
+
+          <button type="submit" className="submit-button">Create Account</button>
         </form>
-       
       </div>
-      <img src={img} alt="Illustration" />
+
+      <div className="form-background">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+      </div>
     </div>
   );
 }

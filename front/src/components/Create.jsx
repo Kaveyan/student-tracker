@@ -1,8 +1,7 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { Link, useNavigate } from "react-router-dom";
-import img2 from "../img/Interaction design Customizable Cartoon Illustrations _ Bro Style.jpeg";
+import { FaUserGraduate, FaChalkboardTeacher, FaUserShield } from 'react-icons/fa';
+import './create.css';
 
 function Create() {
   const navigate = useNavigate();
@@ -28,20 +27,52 @@ function Create() {
   };
 
   return (
-    <div className='background'>
-      <div>
-        <form>
-          <h3 className='sign'>Signup As</h3>
-          <button type="button" onClick={() => handleRoleSelection('admin')}>Admin</button>
-          <button type="button" onClick={() => handleRoleSelection('student')}>Student</button>
-          <button type="button" onClick={() => handleRoleSelection('faculty')}>Faculty</button>
-         
-          <div className="new">
-            <p>Already have an account? &nbsp; &nbsp; &nbsp;  <Link to="/">Login</Link> </p>
-          </div>
-        </form>
+    <div className="signup-container">
+      <div className="signup-content">
+        <div className="signup-header">
+          <FaUserGraduate className="logo-icon" />
+          <h1>Create Account</h1>
+          <p className="subtitle">Choose your role to get started</p>
+        </div>
+
+        <div className="role-buttons">
+          <button 
+            type="button" 
+            className="role-button admin-button"
+            onClick={() => handleRoleSelection('admin')}
+          >
+            <FaUserShield className="role-icon" />
+            <span>Admin</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="role-button student-button"
+            onClick={() => handleRoleSelection('student')}
+          >
+            <FaUserGraduate className="role-icon" />
+            <span>Student</span>
+          </button>
+
+          <button 
+            type="button" 
+            className="role-button faculty-button"
+            onClick={() => handleRoleSelection('faculty')}
+          >
+            <FaChalkboardTeacher className="role-icon" />
+            <span>Faculty</span>
+          </button>
+        </div>
+
+        <p className="login-link">
+          Already have an account? <Link to="/">Sign in</Link>
+        </p>
       </div>
-      <img src={img2} alt="Illustration" />
+
+      <div className="signup-background">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+      </div>
     </div>
   );
 }

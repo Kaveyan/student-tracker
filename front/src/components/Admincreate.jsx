@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import img from "../img/Free Vector _ Design thinking concept illustration.jpeg";
+import { FaUserShield, FaEnvelope, FaUser, FaLock } from 'react-icons/fa';
+import './createforms.css';
 
 export default function AdminCreate() {
   const navigate = useNavigate();
@@ -58,50 +59,77 @@ export default function AdminCreate() {
   };
 
   return (
-    <div className="column">
-      <div className='f-contain'> 
-        <div>
-          <header>Register Here..</header>
+    <div className="form-container">
+      <div className="form-content">
+        <div className="form-header">
+          <FaUserShield className="logo-icon" />
+          <h1>Admin Registration</h1>
+          <p className="subtitle">Create your admin account</p>
         </div>
-        <form onSubmit={handleSubmit} className='form'>
-          <div className='res'>
-            <div className="input-box">
+
+        <form onSubmit={handleSubmit}>
+          <div className="form-row">
+            <div className="input-group">
               <label>Full Name</label>
-              <input
-                type="text"
-                name="firstName"
-                placeholder='Name...'
-                value={adminSignup.firstName}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaUser className="input-icon" />
+                <input
+                  className="form-input"
+                  type="text"
+                  name="firstName"
+                  placeholder="Enter your full name"
+                  value={adminSignup.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <div className='res'>
-            <div className="input-box">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder='Email...'
-                value={adminSignup.email}
-                onChange={handleChange}
-              />
+
+          <div className="form-row">
+            <div className="input-group">
+              <label>Email Address</label>
+              <div className="input-wrapper">
+                <FaEnvelope className="input-icon" />
+                <input
+                  className="form-input"
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={adminSignup.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
-            <div className="input-box">
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
               <label>Password</label>
-              <input
-                type="password"
-                name="password"
-                placeholder='Password...'
-                value={adminSignup.password}
-                onChange={handleChange}
-              />
+              <div className="input-wrapper">
+                <FaLock className="input-icon" />
+                <input
+                  className="form-input"
+                  type="password"
+                  name="password"
+                  placeholder="Create a password"
+                  value={adminSignup.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
           </div>
-          <button type="submit">Submit</button>
+
+          <button type="submit" className="submit-button">Create Account</button>
         </form>
       </div>
-      <img src={img} alt="Illustration" />
+
+      <div className="form-background">
+        <div className="shape shape1"></div>
+        <div className="shape shape2"></div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,181 @@
+.signup-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.signup-content {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo-icon {
+  font-size: 48px;
+  color: #4285f4;
+  margin-bottom: 20px;
+}
+
+.signup-header h1 {
+  margin: 0;
+  color: #1a73e8;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #5f6368;
+  font-size: 16px;
+  margin: 0;
+}
+
+.role-buttons {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.role-button {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e8eaed;
+  border-radius: 12px;
+  background: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #5f6368;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-icon {
+  font-size: 24px;
+}
+
+.admin-button {
+  border-color: #ea4335;
+  color: #ea4335;
+}
+
+.admin-button:hover {
+  background: #ea4335;
+  color: white;
+}
+
+.student-button {
+  border-color: #4285f4;
+  color: #4285f4;
+}
+
+.student-button:hover {
+  background: #4285f4;
+  color: white;
+}
+
+.faculty-button {
+  border-color: #0f9d58;
+  color: #0f9d58;
+}
+
+.faculty-button:hover {
+  background: #0f9d58;
+  color: white;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #5f6368;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #1a73e8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+.signup-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shape {
+  position: absolute;
+  background: linear-gradient(45deg, #4285f4, #0f9d58);
+  filter: blur(60px);
+  opacity: 0.1;
+  border-radius: 50%;
+}
+
+.shape1 {
+  width: 500px;
+  height: 500px;
+  top: -250px;
+  left: -250px;
+}
+
+.shape2 {
+  width: 400px;
+  height: 400px;
+  bottom: -200px;
+  right: -200px;
+}
+
+@media (max-width: 480px) {
+  .signup-content {
+    padding: 30px 20px;
+  }
+
+  .logo-icon {
+    font-size: 40px;
+  }
+
+  .signup-header h1 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .role-button {
+    padding: 12px;
+  }
+
+  .role-icon {
+    font-size: 20px;
+  }
+}
