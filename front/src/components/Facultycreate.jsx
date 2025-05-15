@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./all.css";
 import img from "../img/Free Vector _ Flat creativity concept illustration.jpeg";
 
 export default function FacultyCreate() {
+  const navigate = useNavigate();
   const [facultySignup, setFacultySignup] = useState({
     firstName: "",
     department: "",
@@ -23,20 +25,36 @@ export default function FacultyCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/users/facultyregister', {
+      // Ensure role is set
+      const roleFromStorage = localStorage.getItem('selectedRole');
+      const facultySignupWithRole = {
+        ...facultySignup,
+        role: roleFromStorage || 'faculty'
+      };
+
+      const response = await fetch('http://localhost:3001/users/facultyregister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(facultySignup),
+        body: JSON.stringify(facultySignupWithRole),
       });
-  
+
       if (response.ok) {
-        alert('Registration successful!');
+        const data = await response.json();
+        // Store token and user info
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userRole', data.faculty.role);
+        
+        // Clear the selected role
+        localStorage.removeItem('selectedRole');
+        
+        // Navigate to faculty home
+        navigate('/facultyhome');
       } else {
         const errorData = await response.json();
-        console.error('Error:', errorData);
-        alert('Registration failed: ' + errorData.message);
+        alert(errorData.message || 'Registration failed.');
+        // Handle errors (e.g., show error message);
       }
     } catch (error) {
       console.error('Error:', error);

@@ -20,6 +20,14 @@ const uploadlanguage = async (req, res) => {
 
     try {
         const newLanguage = await language.create({ userId, name, proof });
+        await sendMessage('document-processing', {
+          uploadId: newLanguage._id,
+          userId,
+          name,
+          proof,
+          status: 'pending_verification',
+          timestamp: new Date().toISOString()
+        });
         res.status(201).json(newLanguage);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -31,6 +39,13 @@ const uploadps = async (req, res) => {
     const userId = req.userId; 
     try {
         const newPs = await ps.create({ userId, name });
+        await sendMessage('document-processing', {
+          uploadId: newPs._id,
+          userId,
+          name,
+          status: 'pending_verification',
+          timestamp: new Date().toISOString()
+        });
         res.status(201).json(newPs);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -88,14 +103,18 @@ const uploadachivement = async (req, res) => {
         ]);
 
         
+        const totalPoints = projectCount + languageCount + clanguageCount + certificateCount + achivementCount;
+        
         await User.findByIdAndUpdate(userId, {
-            'points.project': projectCount,
-            'points.language': languageCount,
-            'points.communication': clanguageCount,
-            'points.certificate': certificateCount,
-            'points.achievement': achivementCount,
-            'points.total': projectCount + languageCount + clanguageCount + certificateCount + achivementCount 
-        });
+            $set: {
+                'points.project': projectCount,
+                'points.language': languageCount,
+                'points.communication': clanguageCount,
+                'points.certificate': certificateCount,
+                'points.achievement': achivementCount,
+                'points.total': totalPoints
+            }
+        }, { new: true });
 
         
         res.json({
@@ -190,17 +209,72 @@ function determineModel(domain) {
   }
 }
 
-const Rank=async (req, res) => {
-  const sortBy = req.query.sortBy || 'total'; 
+const { sendMessage } = require('../config/kafka');
+
+const Rank = async (req, res) => {
+  const sortBy = req.query.sortBy || 'total';
 
   try {
-    const users = await User.find().sort({ [`points.${sortBy}`]: -1 });
-    res.status(200).json(users);
+    // Get sorted users with their full information
+    const users = await User.find({ role: 'student' }).sort({ [`points.${sortBy}`]: -1 });
+
+    // Calculate rankings and create ranking updates
+    const rankingUpdates = users.map((user, index) => ({
+      studentId: user._id,
+      rank: index + 1,
+      category: sortBy,
+      points: user.points || {},
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roleNumber: user.roleNumber,
+      email: user.email
+    }));
+
+    // Send batch ranking updates to Kafka
+    await sendMessage('batch-processing', {
+      type: 'ranking_update',
+      category: sortBy,
+      rankings: rankingUpdates,
+      timestamp: new Date().toISOString()
+    });
+
+    // Send individual performance updates
+    for (const update of rankingUpdates) {
+      await sendMessage('performance-tracking', {
+        studentId: update.studentId,
+        metrics: {
+          rank: update.rank,
+          category: update.category,
+          points: update.points
+        },
+        timestamp: new Date().toISOString()
+      });
+
+      // Send notifications for top performers (top 3)
+      if (update.rank <= 3) {
+        await sendMessage('notifications', {
+          type: 'ranking_achievement',
+          recipients: ['student', 'faculty'],
+          data: {
+            studentId: update.studentId,
+            rank: update.rank,
+            category: update.category,
+            firstName: update.firstName
+          },
+          message: `Congratulations ${update.firstName}! You are now ranked #${update.rank} in ${update.category}!`,
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
+
+    // Return the ranked users with their full information
+    res.status(200).json(rankingUpdates);
+
   } catch (err) {
-    console.error('Error fetching users:', err);
+    console.error('Error processing rankings:', err);
     res.status(500).json({ message: 'Server Error' });
   }
-}
+};
 
 
 

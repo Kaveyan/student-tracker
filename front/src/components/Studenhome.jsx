@@ -17,7 +17,7 @@ export default function Studenhome() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token'); // Fetch token from local storage
-      const response = await fetch('http://localhost:8000/upload/list', {
+      const response = await fetch('http://localhost:3001/upload/list', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

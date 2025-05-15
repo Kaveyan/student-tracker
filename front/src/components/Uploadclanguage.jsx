@@ -24,7 +24,7 @@ export default function UploadCLanguage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/upload/clanguage', {
+      const response = await fetch('http://localhost:3001/upload/clanguage', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

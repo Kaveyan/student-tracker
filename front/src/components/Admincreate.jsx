@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import img from "../img/Free Vector _ Design thinking concept illustration.jpeg";
 
 export default function AdminCreate() {
+  const navigate = useNavigate();
   const [adminSignup, setAdminSignup] = useState({
     firstName: "",
     email: "",
@@ -19,24 +21,39 @@ export default function AdminCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/users/adminregister', {
+      // Ensure role is set
+      const roleFromStorage = localStorage.getItem('selectedRole');
+      const adminSignupWithRole = {
+        ...adminSignup,
+        role: roleFromStorage || 'admin'
+      };
+
+      // Register admin with backend
+      const response = await fetch('http://localhost:3001/users/adminregister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(adminSignup),
+        body: JSON.stringify(adminSignupWithRole)
       });
 
       if (response.ok) {
-        alert('Registration successful!');
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userRole', data.admin.role);
+
+        // Clear the selected role
+        localStorage.removeItem('selectedRole');
+
+        // Navigate to admin home
+        navigate('/adminhome');
       } else {
         const errorData = await response.json();
-        console.error('Error:', errorData);
-        alert('Registration failed: ' + errorData.message);
+        throw new Error(errorData.message || 'Registration failed');
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('An error occurred. Please try again.');
+      alert(error.message || 'An error occurred. Please try again.');
     }
   };
 

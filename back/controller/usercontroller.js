@@ -17,11 +17,15 @@ const registerUser = async (req, res) => {
       roleNumber,
       batch,
       email,
-      password, 
+      password,
+      role: 'student', // Explicitly set role to student
     });
 
-    const token = generateToken(user._id);
-    res.status(201).json({ user, token });
+    const token = generateToken(user._id, user.role);
+    res.status(201).json({ 
+      user: { ...user.toObject() }, 
+      token 
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -30,37 +34,56 @@ const registerUser = async (req, res) => {
 
 
 const loginUser = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
 
   try {
-    let user;
-    switch (role) {
-      case 'student':
-        user = await User.findOne({ email });
+    const userModels = [
+      { model: User, role: 'student' },
+      { model: Faculty, role: 'faculty' },
+      { model: Admin, role: 'admin' },
+      { model: Parent, role: 'parent' }
+    ];
+
+    let authenticatedUser = null;
+    let userRole = null;
+
+    for (const { model, role } of userModels) {
+      const user = await model.findOne({ email });
+
+      if (user && user.password === password) {
+        authenticatedUser = user;
+        userRole = role;
         break;
-      case 'faculty':
-        user = await Faculty.findOne({ email });
-        break;
-      case 'admin':
-        user = await Admin.findOne({ email });
-        break;
-      case 'parent':
-        user = await Parent.findOne({ email });
-        break;
-      default:
-        return res.status(400).json({ message: 'Invalid role' });
+      }
     }
 
-    if (!user || password !== user.password) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    if (!authenticatedUser) {
+      return res.status(401).json({ message: 'Invalid credentials. Please check your email and password.' });
     }
 
-    // Include the role when generating the token
-    const token = generateToken(user._id, role);
+    // Assign role if missing in DB
+    if (!authenticatedUser.role) {
+      authenticatedUser.role = userRole;
+      await authenticatedUser.save();
+    }
 
-    res.status(200).json({ user: { name: user.firstName }, token });
+    const token = generateToken(authenticatedUser._id, userRole);
+
+    res.status(200).json({
+      user: {
+        name: authenticatedUser.firstName,
+        role: authenticatedUser.role
+      },
+      token
+    });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Login error:', error);
+    res.status(500).json({ message: 'An unexpected error occurred during login' });
   }
 };
 
@@ -77,10 +100,14 @@ const registerFaculty = async (req, res) => {
       domain,
       email,
       password, // No password hashing
+      role: 'faculty', // Explicitly set role to faculty
     });
 
-    const token = generateToken(faculty._id);
-    res.status(201).json({ faculty, token });
+    const token = generateToken(faculty._id, faculty.role);
+    res.status(201).json({ 
+      faculty: { ...faculty.toObject() }, 
+      token 
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -96,10 +123,14 @@ const registerAdmin = async (req, res) => {
       lastName,
       email,
       password, // No password hashing
+      role: 'admin', // Explicitly set role to admin
     });
 
-    const token = generateToken(admin._id);
-    res.status(201).json({ admin, token });
+    const token = generateToken(admin._id, admin.role);
+    res.status(201).json({ 
+      admin: { ...admin.toObject() }, 
+      token 
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -115,10 +146,14 @@ const registerParent = async (req, res) => {
       lastName,
       email,
       password, // No password hashing
+      role: 'parent', // Explicitly set role to parent
     });
 
-    const token = generateToken(parent._id);
-    res.status(201).json({ parent, token });
+    const token = generateToken(parent._id, parent.role);
+    res.status(201).json({ 
+      parent: { ...parent.toObject() }, 
+      token 
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }

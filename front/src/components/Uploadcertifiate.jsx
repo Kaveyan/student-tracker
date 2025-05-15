@@ -25,7 +25,7 @@ export default function UploadCertificate() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/upload/certificate', {
+      const response = await fetch('http://localhost:3001/upload/certificate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

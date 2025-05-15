@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const pointsSchema = new mongoose.Schema({
+  total: {
+    type: Number,
+    default: 0
+  },
   achievement: {
     type: Number,
     default: 0
@@ -21,12 +25,7 @@ const pointsSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  total: {
-    type: Number,
-    default: function() {
-      return this.achievement + this.project + this.language + this.communication + this.certificate;
-    }
-  }
+
 });
 
 const userSchema = new mongoose.Schema({
@@ -55,14 +54,32 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a Password']
   },
+  role: {
+    type: String,
+    required: true,
+    enum: ['student', 'faculty', 'admin', 'parent'],
+    default: 'student'
+  },
   points: {
     type: pointsSchema,
-    default: () => ({})
+    default: () => ({
+      total: 0,
+      project: 0,
+      language: 0,
+      communication: 0,
+      certificate: 0,
+      achievement: 0
+    })
   }
-
 }, { timestamps: true });
 
 const facultySchema = new mongoose.Schema({
+  role: {
+    type: String,
+    required: true,
+    default: 'faculty',
+    enum: ['faculty']
+  },
   firstName: {
     type: String,
     required: [true, 'Please add a First Name']
@@ -93,6 +110,12 @@ const facultySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const adminSchema = new mongoose.Schema({
+  role: {
+    type: String,
+    required: true,
+    default: 'admin',
+    enum: ['admin']
+  },
   firstName: {
     type: String,
     required: [true, 'Please add a First Name']
@@ -110,6 +133,12 @@ const adminSchema = new mongoose.Schema({
 
 // Define the schema for Parent
 const parentSchema = new mongoose.Schema({
+  role: {
+    type: String,
+    required: true,
+    default: 'parent',
+    enum: ['parent']
+  },
   firstName: {
     type: String,
     required: [true, 'Please add a First Name']

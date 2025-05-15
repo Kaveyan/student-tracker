@@ -34,7 +34,7 @@ export default function UploadAchievement() {
       const decodedToken = JSON.parse(jsonPayload);
       const userId = decodedToken.userId;
 
-      const response = await fetch('http://localhost:8000/upload/achivement', {
+      const response = await fetch('http://localhost:3001/upload/achivement', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

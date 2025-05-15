@@ -12,7 +12,7 @@ export default function Facultyhome() {
       const token = localStorage.getItem('token');
 
       // Fetch domain-specific data
-      const response = await fetch('http://localhost:8000/upload/domain-data', {
+      const response = await fetch('http://localhost:3001/upload/domain-data', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -29,7 +29,7 @@ export default function Facultyhome() {
       }
 
       // Fetch user data
-      const userResponse = await fetch('http://localhost:8000/upload/domain-data', {
+      const userResponse = await fetch('http://localhost:3001/upload/domain-data', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -58,7 +58,7 @@ export default function Facultyhome() {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch(`http://localhost:8000/upload/update-verification/${id}`, {
+      const response = await fetch(`http://localhost:3001/upload/update-verification/${id}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

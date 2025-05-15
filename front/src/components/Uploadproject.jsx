@@ -26,7 +26,7 @@ export default function UploadProject() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/upload/project', {
+      const response = await fetch('http://localhost:3001/upload/project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

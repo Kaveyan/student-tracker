@@ -4,44 +4,49 @@ import './login.css';
 import src from '../img/Free Vector _ Unboxing concept illustration.jpeg';
 
 function Login() {
-  const [role, setRole] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const dashboardRoutes = {
+    'admin': '/adminhome',
+    'student': '/studenthome',
+    'faculty': '/facultyhome',
+    'parent': '/parenthome'
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/users/login', {
+      const response = await fetch('http://localhost:3001/users/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ role, email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        throw new Error('Login failed!');
-      }
-
       const data = await response.json();
-      localStorage.setItem('token', data.token); // Store the JWT token in localStorage
 
-      // Redirect based on role
-      if (role === 'admin') {
-        navigate('/adminhome');
-      } else if (role === 'student') {
-        navigate('/studenthome');
-      } else if (role === 'faculty') {
-        navigate('/facultyhome');
-      } else if (role === 'parent') {
-        navigate('/studenthome');
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
       }
+
+      const role = data.user?.role;
+      if (!role || !dashboardRoutes[role]) {
+        throw new Error('Unable to determine correct dashboard');
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('userEmail', email);
+
+      navigate(dashboardRoutes[role]);
     } catch (err) {
       setError(err.message);
-      console.log(err);
+      console.error('Login error:', err);
+      localStorage.clear();
     }
   };
 
@@ -53,21 +58,6 @@ function Login() {
       <div className="login">
         <form onSubmit={handleSubmit}>
           <h3>Login Here</h3>
-
-          <label htmlFor="role">Enter As</label>
-          <select
-            id="role"
-            name="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            required
-          >
-            <option value="">Select Role</option>
-            <option value="admin">Admin</option>
-            <option value="student">Student</option>
-            <option value="faculty">Faculty</option>
-            <option value="parent">Parent</option>
-          </select>
 
           <label htmlFor="email">Email</label>
           <input
@@ -93,9 +83,7 @@ function Login() {
 
           <button type="submit">Log In</button>
           <div className="new">
-            <p>
-              Don't have an account? <Link to="/Create">Signup</Link>
-            </p>
+            <p>Don't have an account? <Link to="/Create">Signup</Link></p>
           </div>
         </form>
       </div>

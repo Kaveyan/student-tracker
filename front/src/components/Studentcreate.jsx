@@ -1,14 +1,17 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import img from "../img/Startup life Customizable Semi Flat Illustrations _ Pana Style.jpeg";
 
 export default function StudentCreate() {
+  const navigate = useNavigate();
   const [studentSignup, setStudentSignup] = useState({
     firstName: "",
     department: "",
     roleNumber: "",
     batch: "",
     email: "",
-    password: ""
+    password: "",
+    role: localStorage.getItem('selectedRole') || 'student'
   });
 
   useEffect(() => {
@@ -34,20 +37,35 @@ export default function StudentCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/users/studentregister', {
+      // Ensure role is set
+      const roleFromStorage = localStorage.getItem('selectedRole');
+      const studentSignupWithRole = {
+        ...studentSignup,
+        role: roleFromStorage || 'student'
+      };
+
+      const response = await fetch('http://localhost:3001/users/studentregister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(studentSignup),
+        body: JSON.stringify(studentSignupWithRole),
       });
 
       if (response.ok) {
-        alert('Registration successful!');
-        // Handle successful registration (e.g., redirect, clear form)
+        const data = await response.json();
+        // Store token and user info
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userRole', data.user.role);
         
+        // Clear the selected role
+        localStorage.removeItem('selectedRole');
+        
+        // Navigate to student home
+        navigate('/studenthome');
       } else {
-        alert('Registration failed.');
+        const errorData = await response.json();
+        alert(errorData.message || 'Registration failed.');
         // Handle errors (e.g., show error message)
         
       }

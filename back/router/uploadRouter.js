@@ -24,7 +24,7 @@ router.post('/achivement', authMiddleware, uploadachivement);
 router.get('/list', authMiddleware, list)
 router.get('/domain-data', authMiddleware, getFacultyDomainData);
 router.patch('/update-verification/:id', authMiddleware, updateVerificationStatus);
-router.get('/rank', Rank)
+router.get('/rank', authMiddleware, Rank)
 
 
 module.exports = router;
