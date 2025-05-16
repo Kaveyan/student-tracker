@@ -34,7 +34,7 @@ export default function UploadCertificate() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/upload/certificate', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/certificate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

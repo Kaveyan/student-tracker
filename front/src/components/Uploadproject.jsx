@@ -32,7 +32,7 @@ export default function UploadProject() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/upload/project', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/project', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

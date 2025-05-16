@@ -30,7 +30,7 @@ export default function AdminCreate() {
       };
 
       // Register admin with backend
-      const response = await fetch('http://localhost:3001/users/adminregister', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/users/adminregister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

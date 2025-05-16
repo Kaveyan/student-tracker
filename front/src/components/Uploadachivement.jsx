@@ -42,7 +42,7 @@ export default function UploadAchievement() {
       const decodedToken = JSON.parse(jsonPayload);
       const userId = decodedToken.userId;
 
-      const response = await fetch('http://localhost:3001/upload/achivement', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/achivement', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

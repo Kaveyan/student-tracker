@@ -22,7 +22,7 @@ export default function Facultyhome() {
       setLoading(true);
       const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:3001/upload/domain-data', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/domain-data', {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -52,7 +52,7 @@ export default function Facultyhome() {
     try {
       const token = localStorage.getItem('token');
 
-      const response = await fetch(`http://localhost:3001/upload/update-verification/${id}`, {
+      const response = await fetch(`https://student-tracker-backend-45dp.onrender.com/upload/update-verification/${id}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

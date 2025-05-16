@@ -29,7 +29,7 @@ export default function Studenhome() {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token'); // Fetch token from local storage
-      const response = await fetch('http://localhost:3001/upload/list', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/list', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

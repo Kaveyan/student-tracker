@@ -32,7 +32,7 @@ export default function FacultyCreate() {
         role: roleFromStorage || 'faculty'
       };
 
-      const response = await fetch('http://localhost:3001/users/facultyregister', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/users/facultyregister', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

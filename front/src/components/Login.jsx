@@ -21,7 +21,7 @@ function Login() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/users/login', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -101,7 +101,7 @@ function Login() {
           <button 
             type="button" 
             className="google-button"
-            onClick={() => window.location.href = 'http://localhost:3001/auth/google'}
+            onClick={() => window.location.href = 'https://student-tracker-backend-45dp.onrender.com/auth/google'}
           >
             <FaGoogle className="google-icon" />
             Sign in with Google

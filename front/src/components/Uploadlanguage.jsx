@@ -24,7 +24,7 @@ export default function UploadLanguage() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/upload/language', {
+      const response = await fetch('https://student-tracker-backend-45dp.onrender.com/upload/language', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

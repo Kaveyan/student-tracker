@@ -23,7 +23,7 @@ export default function Adminhome() {
         setLoading(true);
         setError(null);
 
-        const response = await fetch(`http://localhost:3001/upload/list?sortBy=${category}`, {
+        const response = await fetch(`https://student-tracker-backend-45dp.onrender.com/upload/list?sortBy=${category}`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
