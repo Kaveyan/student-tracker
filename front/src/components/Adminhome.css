@@ -1,42 +1,187 @@
-.ranking-controls {
-  margin: 20px 0;
+:root {
+  --primary-color: #2563eb;
+  --secondary-color: #1e40af;
+  --success-color: #22c55e;
+  --error-color: #ef4444;
+  --background-color: #f8fafc;
+  --card-background: #ffffff;
+  --text-color: #1f2937;
+  --border-color: #e5e7eb;
 }
 
-.ranking-controls select {
-  padding: 8px 16px;
-  font-size: 16px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  background-color: white;
+.dash {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dash-menu {
+  width: 260px;
+  transition: width 0.3s ease;
+}
+
+.dash-menu.collapsed {
+  width: 80px;
+}
+
+.dash-main-admin {
+  flex: 1;
+  padding: 2rem;
+  background-color: var(--background-color);
+  transition: margin-left 0.3s ease;
+}
+
+.dash-main-admin.collapsed {
+  margin-left: 80px;
+}
+
+.admin-dashboard {
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+  color: var(--text-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.filter-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.category-select {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-background);
+  font-size: 1rem;
+  color: var(--text-color);
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.category-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--card-background);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  padding: 1rem;
+  background-color: #fee2e2;
+  border: 1px solid var(--error-color);
+  border-radius: 0.5rem;
+  color: var(--error-color);
+  margin-bottom: 1rem;
+}
+
+.ranking-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.stat-card h3 {
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.ranking-container {
+  background-color: var(--card-background);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .ranking-table {
-  margin: 20px;
   overflow-x: auto;
+  margin-top: 1rem;
 }
 
 .ranking-table table {
   width: 100%;
   border-collapse: collapse;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background-color: var(--card-background);
 }
 
 .ranking-table th,
 .ranking-table td {
-  padding: 12px;
+  padding: 1rem;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
 }
 
 .ranking-table th {
-  background-color: #f5f5f5;
+  background-color: #f3f4f6;
   font-weight: 600;
+  color: #4b5563;
 }
 
-.ranking-table tr:hover {
-  background-color: #f9f9f9;
+.rank-row {
+  transition: all 0.2s ease;
+}
+
+.rank-row:hover {
+  background-color: #f3f4f6;
+}
+
+.rank-cell {
+  width: 60px;
 }
 
 /* Rank styling */
@@ -54,24 +199,34 @@
 
 .gold-trophy {
   color: #FFD700;
+  font-size: 1.5rem;
 }
 
 .silver-medal {
   color: #C0C0C0;
+  font-size: 1.5rem;
 }
 
 .bronze-award {
   color: #CD7F32;
+  font-size: 1.5rem;
 }
 
 .rank-number {
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background-color: #f0f0f0;
-  color: #666;
+  background-color: #f3f4f6;
+  color: #6b7280;
   font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.rank-number:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.1);
 }

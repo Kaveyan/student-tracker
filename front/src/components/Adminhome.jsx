@@ -7,6 +7,8 @@ import './Adminhome.css';
 export default function Adminhome() {
   const [users, setUsers] = useState([]);
   const [category, setCategory] = useState('total'); // Default to total points
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Fetch users from the server
   useEffect(() => {
@@ -14,9 +16,12 @@ export default function Adminhome() {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          console.error('No auth token found');
+          setError('Authentication required');
           return;
         }
+
+        setLoading(true);
+        setError(null);
 
         const response = await fetch(`http://localhost:3001/upload/list?sortBy=${category}`, {
           headers: {
@@ -30,9 +35,12 @@ export default function Adminhome() {
         }
 
         const data = await response.json();
-        setUsers(data); // Data is already sorted from backend
+        setUsers(Array.isArray(data) ? data : data.users || []);
       } catch (error) {
+        setError('Failed to fetch rankings. Please try again.');
         console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchUsers();
@@ -52,56 +60,106 @@ export default function Adminhome() {
     }
   };
 
+  // Format points with commas
+  const formatPoints = (points) => {
+    return points.toLocaleString();
+  };
+
   return (
     <div className='dash'>
       <div className='dash-menu'>
-        <Menuadmin />
+        <Menuadmin 
+          onCollapseChange={(collapsed) => {
+            const menuElement = document.querySelector('.sidebar');
+            if (menuElement) {
+              menuElement.classList.toggle('collapsed');
+            }
+          }} 
+        />
       </div>
 
       <div className='dash-main-admin'>
-        <div className='option'>
-          <h1>Student Rankings <FontAwesomeIcon icon={faRankingStar} /></h1>
-          <div className='ranking-controls'>
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="total">Total Points</option>
-              <option value="project">Project Points</option>
-              <option value="language">Language Points</option>
-              <option value="achievement">Achievement Points</option>
-              <option value="certificate">Certificate Points</option>
-            </select>
+        <div className='admin-dashboard'>
+          <div className='dashboard-header'>
+            <h1>Student Rankings <FontAwesomeIcon icon={faRankingStar} /></h1>
+            <div className='filter-container'>
+              <select 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                className='category-select'
+              >
+                <option value="total">Total Points</option>
+                <option value="project">Project Points</option>
+                <option value="language">Language Points</option>
+                <option value="achievement">Achievement Points</option>
+                <option value="certificate">Certificate Points</option>
+              </select>
+            </div>
           </div>
-          <div className='ranking-table'>
-            <table>
-              <thead>
-                <tr>
-                  <th>Rank</th>
-                  <th>Roll Number</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Total Points</th>
-                  <th>Project</th>
-                  <th>Language</th>
-                  <th>Achievement</th>
-                  <th>Certificate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user) => (
-                  <tr key={user.studentId} className={user.rank <= 3 ? `rank-${user.rank}` : ''}>
-                    <td>{getRankIcon(user.rank)}</td>
-                    <td>{user.roleNumber}</td>
-                    <td>{`${user.firstName} ${user.lastName}`}</td>
-                    <td>{user.email}</td>
-                    <td>{user.points.total || 0}</td>
-                    <td>{user.points.project || 0}</td>
-                    <td>{user.points.language || 0}</td>
-                    <td>{user.points.achievement || 0}</td>
-                    <td>{user.points.certificate || 0}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+          {loading && (
+            <div className='loading-container'>
+              <div className='loading-spinner'></div>
+              <p>Loading rankings...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className='error-message'>
+              <p>{error}</p>
+            </div>
+          )}
+
+          {!loading && !error && (
+            <div className='ranking-container'>
+              <div className='ranking-stats'>
+                <div className='stat-card'>
+                  <h3>Total Students</h3>
+                  <p className='stat-number'>{users.length}</p>
+                </div>
+                <div className='stat-card'>
+                  <h3>Top Performer</h3>
+                  <p className='stat-number'>{users[0]?.points?.total || 0}</p>
+                </div>
+              </div>
+
+              <div className='ranking-table'>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Roll Number</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Total Points</th>
+                      <th>Project</th>
+                      <th>Language</th>
+                      <th>Achievement</th>
+                      <th>Certificate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Array.isArray(users) && users.map((user) => (
+                      <tr 
+                        key={user.studentId} 
+                        className={`rank-row ${user.rank <= 3 ? `rank-${user.rank}` : ''}`}
+                      >
+                        <td className='rank-cell'>{getRankIcon(user.rank)}</td>
+                        <td>{user.roleNumber}</td>
+                        <td>{`${user.firstName}`}</td>
+                        <td>{user.email}</td>
+                        <td>{formatPoints(user.points?.total || 0)}</td>
+                        <td>{formatPoints(user.points?.project || 0)}</td>
+                        <td>{formatPoints(user.points?.language || 0)}</td>
+                        <td>{formatPoints(user.points?.achievement || 0)}</td>
+                        <td>{formatPoints(user.points?.certificate || 0)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

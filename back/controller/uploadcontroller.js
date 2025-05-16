@@ -1,10 +1,11 @@
 const { project, language, ps, certificate, clanguage, achivement } = require('../model/upload');
 const authMiddleware = require('../middleware/authMiddleware');
 const { User,Faculty } = require('../model/userModel');
+// Ensure authconst { Faculty } = require('../model/userModel');Middleware is applied to these routes to set req.userId
 
 const uploadproject = async (req, res) => {
     const { title, description, domain, proof } = req.body;
-    const userId = req.userId; 
+    const userId = req.userId; // From auth middleware
 
     try {
         const newProject = await project.create({ userId, title, description, domain, proof });
@@ -20,14 +21,6 @@ const uploadlanguage = async (req, res) => {
 
     try {
         const newLanguage = await language.create({ userId, name, proof });
-        await sendMessage('document-processing', {
-          uploadId: newLanguage._id,
-          userId,
-          name,
-          proof,
-          status: 'pending_verification',
-          timestamp: new Date().toISOString()
-        });
         res.status(201).json(newLanguage);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -39,13 +32,6 @@ const uploadps = async (req, res) => {
     const userId = req.userId; 
     try {
         const newPs = await ps.create({ userId, name });
-        await sendMessage('document-processing', {
-          uploadId: newPs._id,
-          userId,
-          name,
-          status: 'pending_verification',
-          timestamp: new Date().toISOString()
-        });
         res.status(201).json(newPs);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -54,7 +40,7 @@ const uploadps = async (req, res) => {
 
 const uploadcertificate = async (req, res) => {
     const { title, domain, proof } = req.body;
-    const userId = req.userId; 
+    const userId = req.userId; // From auth middleware
 
     try {
         const newCertificate = await certificate.create({ userId, title, domain, proof });
@@ -66,7 +52,7 @@ const uploadcertificate = async (req, res) => {
 
 const uploadclanguage = async (req, res) => {
     const { name, proof } = req.body;
-    const userId = req.userId; 
+    const userId = req.userId; // From auth middleware
 
     try {
         const newClanguage = await clanguage.create({ userId, name, proof });
@@ -78,7 +64,7 @@ const uploadclanguage = async (req, res) => {
 
 const uploadachivement = async (req, res) => {
     const { eventname, proof } = req.body;
-    const userId = req.userId; 
+    const userId = req.userId; // This should now be correctly set by authMiddleware
   
     try {
       const newAchivement = await achivement.create({ userId, eventname, proof });
@@ -88,48 +74,32 @@ const uploadachivement = async (req, res) => {
     }
   };
 
-  const list = async (req, res) => {
-    const userId = req.userId;
+ 
+const list = async (req, res) => {
+  const { sortBy = 'total' } = req.query;
 
-    try {
-        
-        const [projectCount, languageCount, psCount, certificateCount, clanguageCount, achivementCount] = await Promise.all([
-            project.countDocuments({ userId, verify: true }),
-            language.countDocuments({ userId, verify: true }),
-            ps.countDocuments({ userId, verify: true }),
-            certificate.countDocuments({ userId, verify: true }),
-            clanguage.countDocuments({ userId, verify: true }),
-            achivement.countDocuments({ userId, verify: true })
-        ]);
+  try {
+    // Fetch all users and sort by the chosen category
+    const users = await User.find({})
+      .select('firstName lastName email roleNumber points') // Select only needed fields
+      .lean();
 
-        
-        const totalPoints = projectCount + languageCount + clanguageCount + certificateCount + achivementCount;
-        
-        await User.findByIdAndUpdate(userId, {
-            $set: {
-                'points.project': projectCount,
-                'points.language': languageCount,
-                'points.communication': clanguageCount,
-                'points.certificate': certificateCount,
-                'points.achievement': achivementCount,
-                'points.total': totalPoints
-            }
-        }, { new: true });
+    // Sort users by requested category (descending order)
+    users.sort((a, b) => (b.points?.[sortBy] || 0) - (a.points?.[sortBy] || 0));
 
-        
-        res.json({
-            projects: projectCount,
-            languages: languageCount,
-            ps: psCount,
-            certifications: certificateCount,
-            communication: clanguageCount,
-            achievements: achivementCount
-        });
-    } catch (error) {
-        console.error('Error fetching stats:', error);
-        res.status(500).json({ message: 'Server error' });
-    }
+    // Assign ranks based on sorted position
+    const rankedUsers = users.map((user, index) => ({
+      ...user,
+      rank: index + 1
+    }));
+
+    res.json(rankedUsers);
+  } catch (error) {
+    console.error('Error fetching user rankings:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
+
 
 const getFacultyDomainData = async (req, res) => {
   try {
@@ -165,10 +135,10 @@ const getFacultyDomainData = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
+// In your backend (uploadcontroller.js or relevant controller file)
 
 const updateVerificationStatus = async (req, res) => {
-  console.log('req.user:', req.user); 
+  console.log('req.user:', req.user); // Add this line to debug
 
   if (!req.user || !req.user.domain) {
     return res.status(400).json({ message: 'Invalid user domain' });
@@ -192,6 +162,7 @@ const updateVerificationStatus = async (req, res) => {
   }
 };
 
+// A helper function to determine the correct model based on the domain
 function determineModel(domain) {
   switch (domain) {
     case 'language':
@@ -209,74 +180,19 @@ function determineModel(domain) {
   }
 }
 
-const { sendMessage } = require('../config/kafka');
-
-const Rank = async (req, res) => {
-  const sortBy = req.query.sortBy || 'total';
+const Rank=async (req, res) => {
+  const sortBy = req.query.sortBy || 'total'; // Default to total points if not specified
 
   try {
-    // Get sorted users with their full information
-    const users = await User.find({ role: 'student' }).sort({ [`points.${sortBy}`]: -1 });
-
-    // Calculate rankings and create ranking updates
-    const rankingUpdates = users.map((user, index) => ({
-      studentId: user._id,
-      rank: index + 1,
-      category: sortBy,
-      points: user.points || {},
-      firstName: user.firstName,
-      lastName: user.lastName,
-      roleNumber: user.roleNumber,
-      email: user.email
-    }));
-
-    // Send batch ranking updates to Kafka
-    await sendMessage('batch-processing', {
-      type: 'ranking_update',
-      category: sortBy,
-      rankings: rankingUpdates,
-      timestamp: new Date().toISOString()
-    });
-
-    // Send individual performance updates
-    for (const update of rankingUpdates) {
-      await sendMessage('performance-tracking', {
-        studentId: update.studentId,
-        metrics: {
-          rank: update.rank,
-          category: update.category,
-          points: update.points
-        },
-        timestamp: new Date().toISOString()
-      });
-
-      // Send notifications for top performers (top 3)
-      if (update.rank <= 3) {
-        await sendMessage('notifications', {
-          type: 'ranking_achievement',
-          recipients: ['student', 'faculty'],
-          data: {
-            studentId: update.studentId,
-            rank: update.rank,
-            category: update.category,
-            firstName: update.firstName
-          },
-          message: `Congratulations ${update.firstName}! You are now ranked #${update.rank} in ${update.category}!`,
-          timestamp: new Date().toISOString()
-        });
-      }
-    }
-
-    // Return the ranked users with their full information
-    res.status(200).json(rankingUpdates);
-
+    // Find all users and sort by the specified category (achievement, certificate, etc.)
+    const users = await User.find().sort({ [`points.${sortBy}`]: -1 });
+    res.status(200).json(users);
   } catch (err) {
-    console.error('Error processing rankings:', err);
+    console.error('Error fetching users:', err);
     res.status(500).json({ message: 'Server Error' });
   }
-};
+}
 
 
 
 module.exports = { uploadachivement, uploadcertificate, uploadclanguage, uploadlanguage, uploadproject, uploadps, list,getFacultyDomainData,updateVerificationStatus,Rank };
-

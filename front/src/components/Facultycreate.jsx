@@ -116,7 +116,7 @@ export default function FacultyCreate() {
                 <FaIdCard className="input-icon" />
                 <input
                   className="form-input"
-                  type="text"
+                  type="number"
                   name="roleNumber"
                   placeholder="Enter your faculty ID"
                   value={facultySignup.roleNumber}
@@ -132,15 +132,20 @@ export default function FacultyCreate() {
               <label>Domain</label>
               <div className="input-wrapper">
                 <FaBookReader className="input-icon" />
-                <input
+                <select
                   className="form-input"
-                  type="text"
                   name="domain"
-                  placeholder="Enter your domain"
                   value={facultySignup.domain}
                   onChange={handleChange}
                   required
-                />
+                >
+                  <option value="">Select your domain</option>
+                  <option value="language">Language</option>
+                  <option value="project">Project</option>
+                  <option value="achievement">Achievement</option>
+                  <option value="communication language">Communication Language</option>
+                  <option value="certificate">Certificate</option>
+                </select>
               </div>
             </div>
           </div>

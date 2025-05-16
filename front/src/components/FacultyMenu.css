@@ -1,0 +1,131 @@
+.faculty-menu {
+  background: white;
+  width: 280px;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  border-right: 1px solid #f1f1f1;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.faculty-profile {
+  text-align: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 2rem;
+}
+
+.faculty-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #3498db;
+}
+
+.faculty-name {
+  color: #2c3e50;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.faculty-role {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+}
+
+.menu-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: #7f8c8d;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f8f9fa;
+  color: #3498db;
+}
+
+.menu-item.active {
+  background: #ebf5ff;
+  color: #3498db;
+  font-weight: 500;
+}
+
+.menu-item svg {
+  width: 20px;
+  margin-right: 12px;
+}
+
+.menu-item span {
+  font-size: 0.95rem;
+}
+
+.menu-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  border-top: 1px solid #f1f1f1;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: #e74c3c;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+
+.logout-button:hover {
+  background: #fdf2f1;
+}
+
+.logout-button svg {
+  width: 20px;
+  margin-right: 12px;
+}
+
+@media (max-width: 768px) {
+  .faculty-menu {
+    width: 100%;
+    min-height: auto;
+    padding: 1rem;
+    position: relative;
+  }
+
+  .faculty-profile {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .faculty-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+}

@@ -32,7 +32,7 @@ export default function UploadPLanguage() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/upload/planguage', {
+      const response = await fetch('http://localhost:3001/upload/language', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -68,21 +68,22 @@ export default function UploadPLanguage() {
     }
   };
 
-  const languages = [
-    'JavaScript',
-    'Python',
-    'Java',
-    'C++',
-    'C#',
-    'Ruby',
-    'PHP',
-    'Swift',
-    'Go',
-    'Rust',
-    'TypeScript',
-    'Kotlin',
-    'Other'
-  ];
+ const languages = [
+  'English',
+  'French',
+  'German',
+  'Spanish',
+  'Chinese',
+  'Japanese',
+  'Korean',
+  'Russian',
+  'Arabic',
+  'Hindi',
+  'Portuguese',
+  'Italian',
+  'Other'
+];
+
 
   const proficiencyLevels = [
     'Beginner',

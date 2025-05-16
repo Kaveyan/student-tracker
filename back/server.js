@@ -4,9 +4,7 @@ const userRouter = require('./router/userRouter');
 const UploadRouter = require("./router/uploadRouter");
 const rankingRouter = require('./router/rankingRouter');
 const cors = require('cors');
-const { connectKafka } = require('./config/kafka');
-const setupKafkaTopics = require('./config/setupKafkaTopics');
-const { initializeKafkaConsumers } = require('./services/kafkaConsumers');
+
 require('dotenv').config();
 const passport = require('passport');
 const session = require('express-session');
@@ -18,49 +16,19 @@ const port = process.env.PORT || 3001; // Changed to 3001 to avoid conflicts
 
 app.use(express.json());
 app.use(cors());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],  
-}));
+
 
 // Start server function
 const startServer = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect('mongodb://127.0.0.1:27017/mern-app');
-    console.log('DB connected');
-
-    // Connect to Kafka and set up topics
-    let kafkaEnabled = false;
-    try {
-      const connected = await connectKafka();
-      if (connected) {
-        console.log('Connected to Kafka');
-        try {
-          await setupKafkaTopics();
-          console.log('Kafka topics are ready');
-          const consumersInitialized = await initializeKafkaConsumers();
-          if (consumersInitialized) {
-            console.log('Kafka consumers are ready');
-            kafkaEnabled = true;
-          }
-        } catch (setupError) {
-          console.error('Error setting up Kafka:', setupError);
-        }
-      }
-    } catch (kafkaError) {
-      console.error('Kafka connection failed:', kafkaError);
-    }
-    
-    if (!kafkaEnabled) {
-      console.log('Continuing without Kafka functionality...');
-    }
+    await mongoose.connect('mongodb+srv://kaveyanb:0FIB2MYl2jW5MT2e@cluster0.5zq3aju.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
+    console.log('Connected to MongoDB Atlas');
 
     // Start the server
     const server = app.listen(port, () => {
       console.log(`Server running on port ${port}`);
-      console.log(`Kafka integration: ${kafkaEnabled ? 'Enabled' : 'Disabled'}`);
+
     });
 
     // Handle server errors
